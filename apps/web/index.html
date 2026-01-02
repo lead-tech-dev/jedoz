@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Marketplace d’annonces (18+) inspirée d’un style éditorial clair : recherche par ville, catégories, badges VIP/URGENT/TOP, dashboard annonceur."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="JEDOZ - Marketplace" />
+    <meta property="og:description" content="Trouvez et publiez des annonces par ville et catégorie. Badges VIP/URGENT/TOP."
+    />
+    <meta property="og:url" content="/" />
+    <title>JEDOZ - Marketplace</title>
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem('lodix_theme');
+          if (theme === 'light' || theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', theme);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

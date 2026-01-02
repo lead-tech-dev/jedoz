@@ -1,0 +1,55 @@
+/// Copier-coller dans schema.prisma
+
+model ModerationRule {
+  id          String   @id @default(uuid())
+  country     String?  // ex: CM
+  categorySlug String? // ex: escorts
+  name        String
+  keywords    String[] @default([]) // mots sensibles
+  regexes     String[] @default([]) // patterns
+  weight      Int      @default(10) // poids par match
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([country])
+  @@index([categorySlug])
+}
+
+model ModerationCase {
+  id          String   @id @default(uuid())
+  adId        String   @unique
+  userId      String
+  country     String?
+  categorySlug String?
+  score       Int
+  status      ModerationCaseStatus @default(OPEN)
+  reasons     Json     // { matches:[...], notes:"..." }
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  decisions   ModerationDecision[]
+}
+
+model ModerationDecision {
+  id          String   @id @default(uuid())
+  caseId      String
+  staffUserId String
+  action      ModerationAction
+  reason      String?
+  createdAt   DateTime @default(now())
+
+  mcase       ModerationCase @relation(fields: [caseId], references: [id])
+}
+
+enum ModerationCaseStatus {
+  OPEN
+  CLOSED
+  ESCALATED
+}
+
+enum ModerationAction {
+  APPROVE
+  REJECT
+  ESCALATE
+}

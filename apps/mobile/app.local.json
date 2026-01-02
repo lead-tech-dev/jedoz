@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "extra": {
+      "apiUrl": "http://localhost:3001",
+      "s3PublicBaseUrl": "http://localhost:3001",
+      "appScheme": "mjdating"
+    }
+  }
+}

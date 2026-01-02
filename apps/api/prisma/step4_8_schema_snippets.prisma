@@ -1,0 +1,34 @@
+/// Copier-coller dans schema.prisma
+
+model UserDevice {
+  id        String   @id @default(uuid())
+  userId    String
+  deviceId  String
+  firstSeen DateTime @default(now())
+  lastSeen  DateTime @updatedAt
+  ipFirst   String?
+  ipLast    String?
+  userAgent String?
+
+  @@unique([userId, deviceId])
+  @@index([deviceId])
+}
+
+model UserSecurity {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  isShadowBanned Boolean @default(false)
+  shadowReason String?
+  shadowedAt   DateTime?
+}
+
+model AdFingerprint {
+  id        String   @id @default(uuid())
+  adId      String   @unique
+  userId    String
+  fpText    String   // normalized hash/fingerprint
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([fpText])
+}

@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "JEDOZ",
+    "slug": "mjdating",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "scheme": "mjdating",
+    "ios": {
+      "bundleIdentifier": "com.mj.mjdating",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.mj.mjdating",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            { "scheme": "mjdating" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "extra": {
+      "apiUrl": "https://api.jedoz.com",
+      "s3PublicBaseUrl": "https://api.jedoz.com",
+      "appScheme": "mjdating"
+    }
+  }
+}

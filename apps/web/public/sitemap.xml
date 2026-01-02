@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- TODO: Replace https://your-domain.tld with your production domain -->
+  <url><loc>https://your-domain.tld/</loc></url>
+  <url><loc>https://your-domain.tld/categories</loc></url>
+  <url><loc>https://your-domain.tld/search</loc></url>
+  <url><loc>https://your-domain.tld/packs</loc></url>
+  <url><loc>https://your-domain.tld/boosts</loc></url>
+  <url><loc>https://your-domain.tld/become-pro</loc></url>
+  <url><loc>https://your-domain.tld/help</loc></url>
+  <url><loc>https://your-domain.tld/faq</loc></url>
+  <url><loc>https://your-domain.tld/contact</loc></url>
+  <url><loc>https://your-domain.tld/legal/terms</loc></url>
+  <url><loc>https://your-domain.tld/legal/privacy</loc></url>
+  <url><loc>https://your-domain.tld/legal/cookies</loc></url>
+  <url><loc>https://your-domain.tld/legal/moderation-charter</loc></url>
+  <url><loc>https://your-domain.tld/legal/legal-notice</loc></url>
+</urlset>

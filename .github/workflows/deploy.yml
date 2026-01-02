@@ -1,0 +1,76 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment (dev/staging/prod)"
+        required: true
+        default: "prod"
+
+jobs:
+  build-deploy-static:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'prod' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build web
+        run: pnpm --filter web build
+      - name: Build admin
+        run: pnpm --filter admin build
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+      - name: Deploy web/admin to VPS
+        run: |
+          WEB_DIR="${{ secrets.VPS_WEB_DIR }}"
+          ADMIN_DIR="${{ secrets.VPS_ADMIN_DIR }}"
+          if [ -z "$WEB_DIR" ]; then WEB_DIR="/var/www/jedolo/web"; fi
+          if [ -z "$ADMIN_DIR" ]; then ADMIN_DIR="/var/www/jedolo/admin"; fi
+          ssh -o StrictHostKeyChecking=yes "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '$WEB_DIR' '$ADMIN_DIR'"
+          rsync -az --delete apps/web/dist/ "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}:$WEB_DIR/"
+          rsync -az --delete apps/admin/dist/ "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}:$ADMIN_DIR/"
+
+  deploy-api:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'prod' }}
+    needs: build-deploy-static
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_SSH_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            APP_DIR=${{ secrets.VPS_APP_DIR }}
+            if [ -z "$APP_DIR" ]; then APP_DIR="/var/www/jedolo"; fi
+            if [ ! -d "$APP_DIR/.git" ]; then
+              mkdir -p "$APP_DIR"
+              git clone ${{ secrets.API_GIT_URL || github.repositoryUrl }} "$APP_DIR"
+            fi
+            cd "$APP_DIR"
+            git fetch --all
+            git reset --hard origin/main
+            corepack enable || true
+            corepack prepare pnpm@9.12.1 --activate || true
+            pnpm install --frozen-lockfile
+            pnpm --filter api prisma generate
+            sudo systemctl restart jedolo-api
+            sudo systemctl restart jedolo-worker

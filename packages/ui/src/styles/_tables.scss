@@ -1,0 +1,35 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.table tr:hover td {
+  background: rgba(51, 199, 196, 0.06);
+}
+
+.table.striped tr:nth-child(even) td {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.table.compact th,
+.table.compact td {
+  padding: 8px 10px;
+}

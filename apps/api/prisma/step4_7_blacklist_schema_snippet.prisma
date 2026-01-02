@@ -1,0 +1,17 @@
+/// Copier-coller ce snippet dans ton schema.prisma si pas déjà présent.
+model Blacklist {
+  id        String   @id @default(uuid())
+  type      BlacklistType
+  value     String
+  reason    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@unique([type, value])
+}
+
+enum BlacklistType {
+  IP
+  PHONE
+  DEVICE
+}

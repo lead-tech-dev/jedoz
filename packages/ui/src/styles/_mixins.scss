@@ -1,0 +1,13 @@
+@use './tokens' as t;
+
+@mixin respond($bp) {
+  @if $bp == sm {
+    @media (max-width: t.$bp-sm) { @content; }
+  } @else if $bp == md {
+    @media (max-width: t.$bp-md) { @content; }
+  } @else if $bp == lg {
+    @media (max-width: t.$bp-lg) { @content; }
+  } @else if $bp == xl {
+    @media (max-width: t.$bp-xl) { @content; }
+  }
+}
