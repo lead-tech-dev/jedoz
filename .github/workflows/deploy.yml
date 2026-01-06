@@ -37,7 +37,7 @@ jobs:
             echo "API_URL=https://api.dev.jedoz.com" >> $GITHUB_ENV
           fi
       - name: Install
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Build web
         env:
           VITE_API_URL: ${{ env.API_URL }}
@@ -89,7 +89,7 @@ jobs:
             git reset --hard origin/${DEPLOY_REF}
             corepack enable || true
             corepack prepare pnpm@9.12.1 --activate || true
-            pnpm install --frozen-lockfile
+            pnpm install --no-frozen-lockfile
             pnpm --filter api exec prisma generate
             pnpm --filter api exec prisma migrate deploy
             sudo systemctl restart jedoz-api@${DEPLOY_ENV}
