@@ -2,18 +2,25 @@ name: deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging, dev]
   workflow_dispatch:
     inputs:
       environment:
         description: "Environment (dev/staging/prod)"
         required: true
         default: "prod"
+      git_ref:
+        description: "Git ref/branch to deploy (optional)"
+        required: false
+        default: ""
 
 jobs:
   build-deploy-static:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'prod' }}
+    environment: ${{ env.DEPLOY_ENV }}
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
+      DEPLOY_REF: ${{ inputs.git_ref != '' && inputs.git_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -23,11 +30,24 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+      - name: Set environment URLs
+        run: |
+          if [ "${DEPLOY_ENV}" = "prod" ]; then
+            echo "API_URL=https://api.jedoz.com" >> $GITHUB_ENV
+          elif [ "${DEPLOY_ENV}" = "staging" ]; then
+            echo "API_URL=https://api.staging.jedoz.com" >> $GITHUB_ENV
+          else
+            echo "API_URL=https://api.dev.jedoz.com" >> $GITHUB_ENV
+          fi
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Build web
+        env:
+          VITE_API_URL: ${{ env.API_URL }}
         run: pnpm --filter web build
       - name: Build admin
+        env:
+          VITE_API_BASE: ${{ env.API_URL }}
         run: pnpm --filter admin build
       - name: Configure SSH
         run: |
@@ -39,15 +59,18 @@ jobs:
         run: |
           WEB_DIR="${{ secrets.VPS_WEB_DIR }}"
           ADMIN_DIR="${{ secrets.VPS_ADMIN_DIR }}"
-          if [ -z "$WEB_DIR" ]; then WEB_DIR="/var/www/jedolo/web"; fi
-          if [ -z "$ADMIN_DIR" ]; then ADMIN_DIR="/var/www/jedolo/admin"; fi
+          if [ -z "$WEB_DIR" ]; then WEB_DIR="/var/www/jedoz/${DEPLOY_ENV}/web"; fi
+          if [ -z "$ADMIN_DIR" ]; then ADMIN_DIR="/var/www/jedoz/${DEPLOY_ENV}/admin"; fi
           ssh -o StrictHostKeyChecking=yes "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '$WEB_DIR' '$ADMIN_DIR'"
           rsync -az --delete apps/web/dist/ "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}:$WEB_DIR/"
           rsync -az --delete apps/admin/dist/ "${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }}:$ADMIN_DIR/"
 
   deploy-api:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || 'prod' }}
+    environment: ${{ env.DEPLOY_ENV }}
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
+      DEPLOY_REF: ${{ inputs.git_ref != '' && inputs.git_ref || github.ref_name }}
     needs: build-deploy-static
     steps:
       - uses: actions/checkout@v4
@@ -60,17 +83,100 @@ jobs:
           script: |
             set -e
             APP_DIR=${{ secrets.VPS_APP_DIR }}
-            if [ -z "$APP_DIR" ]; then APP_DIR="/var/www/jedolo"; fi
+            if [ -z "$APP_DIR" ]; then APP_DIR="/var/www/jedoz/${DEPLOY_ENV}/app"; fi
             if [ ! -d "$APP_DIR/.git" ]; then
               mkdir -p "$APP_DIR"
               git clone ${{ secrets.API_GIT_URL || github.repositoryUrl }} "$APP_DIR"
             fi
             cd "$APP_DIR"
             git fetch --all
-            git reset --hard origin/main
+            git reset --hard origin/${DEPLOY_REF}
             corepack enable || true
             corepack prepare pnpm@9.12.1 --activate || true
             pnpm install --frozen-lockfile
-            pnpm --filter api prisma generate
-            sudo systemctl restart jedolo-api
-            sudo systemctl restart jedolo-worker
+            pnpm --filter api exec prisma generate
+            pnpm --filter api exec prisma migrate deploy
+            sudo systemctl restart jedoz-api@${DEPLOY_ENV}
+            sudo systemctl restart jedoz-worker@${DEPLOY_ENV}
+
+  notify:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [build-deploy-static, deploy-api]
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
+    steps:
+      - name: Notify Slack
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        run: |
+          status="success"
+          if [ "${{ needs.build-deploy-static.result }}" != "success" ] || [ "${{ needs.deploy-api.result }}" != "success" ]; then
+            status="failure"
+          fi
+          commit_msg="${{ github.event.head_commit.message }}"
+          commit_sha="${GITHUB_SHA}"
+          commit_short="$(printf "%s" "$commit_sha" | cut -c1-7)"
+          run_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          commit_msg="${commit_msg//$'\n'/ }"
+          commit_msg="${commit_msg//\"/\\\"}"
+          if [ "${DEPLOY_ENV}" = "prod" ]; then
+            web_url="https://jedoz.com"
+            admin_url="https://admin.jedoz.com"
+            api_url="https://api.jedoz.com/health"
+          elif [ "${DEPLOY_ENV}" = "staging" ]; then
+            web_url="https://staging.jedoz.com"
+            admin_url="https://admin.staging.jedoz.com"
+            api_url="https://api.staging.jedoz.com/health"
+          else
+            web_url="https://dev.jedoz.com"
+            admin_url="https://admin.dev.jedoz.com"
+            api_url="https://api.dev.jedoz.com/health"
+          fi
+          job_web="${{ needs.build-deploy-static.result }}"
+          job_api="${{ needs.deploy-api.result }}"
+          if [ "$status" = "success" ]; then
+            color="#2eb886"
+            emoji="✅"
+          else
+            color="#e01e5a"
+            emoji="❌"
+          fi
+          payload=$(cat <<EOF
+          {
+            "attachments": [
+              {
+                "color": "${color}",
+                "blocks": [
+                  {
+                    "type": "header",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "${emoji} Deploy ${DEPLOY_ENV} (${GITHUB_REF_NAME}) - ${status}"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "fields": [
+                      { "type": "mrkdwn", "text": "*Repo:* ${GITHUB_REPOSITORY}" },
+                      { "type": "mrkdwn", "text": "*Actor:* ${GITHUB_ACTOR}" },
+                      { "type": "mrkdwn", "text": "*Web:* ${web_url}" },
+                      { "type": "mrkdwn", "text": "*Admin:* ${admin_url}" },
+                      { "type": "mrkdwn", "text": "*API:* ${api_url}" },
+                      { "type": "mrkdwn", "text": "*Jobs:* web/admin=${job_web}, api=${job_api}" }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "text": { "type": "mrkdwn", "text": "*Commit:* ${commit_short} - ${commit_msg}" }
+                  },
+                  {
+                    "type": "section",
+                    "text": { "type": "mrkdwn", "text": "*Run:* ${run_url}" }
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+          )
+          curl -X POST -H 'Content-type: application/json' --data "$payload" "${{ secrets.SLACK_WEBHOOK_URL }}"

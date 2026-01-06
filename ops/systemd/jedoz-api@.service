@@ -1,0 +1,15 @@
+[Unit]
+Description=Jedoz API (%i)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/jedoz/%i/app
+EnvironmentFile=/var/www/jedoz/%i/app/apps/api/.env
+ExecStart=/usr/bin/node /var/www/jedoz/%i/app/apps/api/src/index.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
