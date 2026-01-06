@@ -78,6 +78,8 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
+            DEPLOY_ENV="${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}"
+            DEPLOY_REF="${{ inputs.git_ref != '' && inputs.git_ref || github.ref_name }}"
             APP_DIR=${{ secrets.VPS_APP_DIR }}
             if [ -z "$APP_DIR" ]; then APP_DIR="/var/www/jedoz/${DEPLOY_ENV}/app"; fi
             if [ ! -d "$APP_DIR/.git" ]; then
