@@ -82,7 +82,11 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            APP_DIR=${{ secrets.VPS_APP_DIR }}
+            DEPLOY_ENV="${{ env.DEPLOY_ENV }}"
+            DEPLOY_REF="${{ env.DEPLOY_REF }}"
+            if [ -z "$DEPLOY_ENV" ]; then DEPLOY_ENV="${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev' }}"; fi
+            if [ -z "$DEPLOY_REF" ]; then DEPLOY_REF="${{ github.ref_name }}"; fi
+            APP_DIR="${{ secrets.VPS_APP_DIR }}"
             if [ -z "$APP_DIR" ]; then APP_DIR="/var/www/jedoz/${DEPLOY_ENV}/app"; fi
             if [ ! -d "$APP_DIR/.git" ]; then
               mkdir -p "$APP_DIR"
@@ -90,7 +94,7 @@ jobs:
             fi
             cd "$APP_DIR"
             git fetch --all
-            git reset --hard origin/${DEPLOY_REF}
+            git reset --hard "origin/${DEPLOY_REF}"
             corepack enable || true
             corepack prepare pnpm@9.12.1 --activate || true
             pnpm install --no-frozen-lockfile
