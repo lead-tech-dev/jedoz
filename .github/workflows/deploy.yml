@@ -9,6 +9,10 @@ on:
         description: "Environment (dev/staging/prod)"
         required: true
         default: "prod"
+      deploy_scope:
+        description: "Deploy scope (all/api/static)"
+        required: true
+        default: "all"
       git_ref:
         description: "Git ref/branch to deploy (optional)"
         required: false
@@ -17,6 +21,7 @@ on:
 jobs:
   build-deploy-static:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_scope != 'api' }}
     environment: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
     env:
       DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
@@ -67,6 +72,7 @@ jobs:
 
   deploy-api:
     runs-on: ubuntu-latest
+    if: ${{ (github.event_name != 'workflow_dispatch' || inputs.deploy_scope != 'static') && (needs.build-deploy-static.result == 'success' || needs.build-deploy-static.result == 'skipped') }}
     environment: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
     env:
       DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
