@@ -17,7 +17,7 @@ on:
 jobs:
   build-deploy-static:
     runs-on: ubuntu-latest
-    environment: ${{ env.DEPLOY_ENV }}
+    environment: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
     env:
       DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
       DEPLOY_REF: ${{ inputs.git_ref != '' && inputs.git_ref || github.ref_name }}
@@ -67,7 +67,7 @@ jobs:
 
   deploy-api:
     runs-on: ubuntu-latest
-    environment: ${{ env.DEPLOY_ENV }}
+    environment: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
     env:
       DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
       DEPLOY_REF: ${{ inputs.git_ref != '' && inputs.git_ref || github.ref_name }}
@@ -107,8 +107,13 @@ jobs:
       DEPLOY_ENV: ${{ inputs.environment || (github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || 'dev') }}
     steps:
       - name: Notify Slack
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
+          if [ -z "${SLACK_WEBHOOK_URL}" ]; then
+            echo "SLACK_WEBHOOK_URL not set; skipping Slack notification."
+            exit 0
+          fi
           status="success"
           if [ "${{ needs.build-deploy-static.result }}" != "success" ] || [ "${{ needs.deploy-api.result }}" != "success" ]; then
             status="failure"
@@ -179,4 +184,4 @@ jobs:
           }
           EOF
           )
-          curl -X POST -H 'Content-type: application/json' --data "$payload" "${{ secrets.SLACK_WEBHOOK_URL }}"
+          curl -X POST -H 'Content-type: application/json' --data "$payload" "${SLACK_WEBHOOK_URL}"
