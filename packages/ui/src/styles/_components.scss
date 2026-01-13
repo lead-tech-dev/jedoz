@@ -2,46 +2,46 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 12px;
-  background: rgba(51, 199, 196, 0.14);
-  color: #0f766e;
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  background: rgba(var(--accent-rgb), 0.16);
+  color: var(--accent);
 }
 
 .iconBubble.teal {
-  background: rgba(51, 199, 196, 0.16);
-  color: #0f766e;
+  background: rgba(var(--accent-rgb), 0.18);
+  color: var(--accent);
 }
 
 .iconBubble.sun {
-  background: rgba(247, 178, 76, 0.16);
-  color: #c2410c;
+  background: rgba(var(--accent2-rgb), 0.18);
+  color: var(--accent2);
 }
 
 .iconBubble.rose {
-  background: rgba(241, 91, 122, 0.16);
-  color: #be123c;
+  background: rgba(var(--accent3-rgb), 0.18);
+  color: var(--accent3);
 }
 
 .iconBubble.indigo {
-  background: rgba(99, 102, 241, 0.16);
-  color: #4338ca;
+  background: rgba(var(--accent4-rgb), 0.18);
+  color: var(--accent4);
 }
 
 .iconBubble.lime {
-  background: rgba(34, 197, 94, 0.16);
-  color: #15803d;
+  background: rgba(var(--accent5-rgb), 0.18);
+  color: var(--accent5);
 }
 
 .iconBubble.sky {
-  background: rgba(14, 165, 233, 0.16);
-  color: #0369a1;
+  background: rgba(var(--accent6-rgb), 0.18);
+  color: var(--accent6);
 }
 
 .iconBubble.slate {
-  background: rgba(51, 65, 85, 0.12);
-  color: #334155;
+  background: rgba(var(--accent7-rgb), 0.18);
+  color: var(--accent7);
 }
 
 .panel {
@@ -67,8 +67,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
   background: var(--panel);
   box-shadow: var(--shadow-soft);
@@ -79,9 +79,9 @@
 
 .btn.primary {
   border: none;
-  color: #041314;
-  background: linear-gradient(120deg, var(--accent), var(--accent2));
-  box-shadow: 0 12px 24px rgba(51, 199, 196, 0.28);
+  color: #1c140b;
+  background: linear-gradient(120deg, var(--accent2), var(--accent));
+  box-shadow: 0 16px 28px rgba(var(--accent2-rgb), 0.28);
 }
 
 .btn.ghost {
@@ -159,13 +159,13 @@
 }
 
 .checkbox.checked {
-  border-color: rgba(51, 199, 196, 0.45);
+  border-color: rgba(var(--accent-rgb), 0.45);
   box-shadow: 0 0 0 2px var(--ring);
 }
 
 .checkbox.checked .checkboxBox {
-  border-color: rgba(51, 199, 196, 0.6);
-  background: rgba(51, 199, 196, 0.12);
+  border-color: rgba(var(--accent-rgb), 0.6);
+  background: rgba(var(--accent-rgb), 0.12);
 }
 
 .checkbox.checked .checkboxBox::after {
@@ -202,23 +202,23 @@
 }
 
 .checkbox.compact.checked .badge.vip {
-  background: rgba(51, 199, 196, 0.26);
-  border-color: rgba(51, 199, 196, 0.55);
+  background: rgba(var(--accent-rgb), 0.26);
+  border-color: rgba(var(--accent-rgb), 0.55);
 }
 
 .checkbox.compact.checked .badge.premium {
-  background: rgba(241, 91, 122, 0.26);
-  border-color: rgba(241, 91, 122, 0.55);
+  background: rgba(var(--accent3-rgb), 0.26);
+  border-color: rgba(var(--accent3-rgb), 0.55);
 }
 
 .checkbox.compact.checked .badge.urgent {
-  background: rgba(247, 178, 76, 0.26);
-  border-color: rgba(247, 178, 76, 0.55);
+  background: rgba(var(--accent2-rgb), 0.26);
+  border-color: rgba(var(--accent2-rgb), 0.55);
 }
 
 .checkbox.compact.checked .badge.top {
-  background: rgba(99, 102, 241, 0.24);
-  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(var(--accent4-rgb), 0.24);
+  border-color: rgba(var(--accent4-rgb), 0.5);
 }
 
 .badge {
@@ -234,45 +234,45 @@
 }
 
 .badge.vip {
-  background: rgba(51, 199, 196, 0.16);
-  border-color: rgba(51, 199, 196, 0.3);
-  color: #0f766e;
+  background: rgba(var(--accent-rgb), 0.16);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent);
 }
 
 .badge.urgent {
-  background: rgba(247, 178, 76, 0.18);
-  border-color: rgba(247, 178, 76, 0.35);
-  color: #c2410c;
+  background: rgba(var(--accent2-rgb), 0.18);
+  border-color: rgba(var(--accent2-rgb), 0.35);
+  color: var(--accent2);
 }
 
 .badge.top {
-  background: rgba(99, 102, 241, 0.16);
-  border-color: rgba(99, 102, 241, 0.35);
-  color: #4338ca;
+  background: rgba(var(--accent4-rgb), 0.16);
+  border-color: rgba(var(--accent4-rgb), 0.35);
+  color: var(--accent4);
 }
 
 .badge.premium {
-  background: rgba(241, 91, 122, 0.16);
-  border-color: rgba(241, 91, 122, 0.35);
-  color: #be123c;
+  background: rgba(var(--accent3-rgb), 0.16);
+  border-color: rgba(var(--accent3-rgb), 0.35);
+  color: var(--accent3);
 }
 
 .badge.neutral {
-  background: rgba(15, 23, 42, 0.08);
-  border-color: rgba(15, 23, 42, 0.2);
-  color: #334155;
+  background: rgba(var(--accent7-rgb), 0.14);
+  border-color: rgba(var(--accent7-rgb), 0.28);
+  color: var(--accent7);
 }
 
 .badge.warn {
-  background: rgba(217, 119, 6, 0.16);
-  border-color: rgba(217, 119, 6, 0.35);
-  color: #b45309;
+  background: rgba(var(--accent2-rgb), 0.18);
+  border-color: rgba(var(--accent2-rgb), 0.38);
+  color: var(--accent2);
 }
 
 .badge.danger {
-  background: rgba(220, 38, 38, 0.16);
-  border-color: rgba(220, 38, 38, 0.35);
-  color: #b91c1c;
+  background: rgba(199, 54, 42, 0.18);
+  border-color: rgba(199, 54, 42, 0.35);
+  color: #c7362a;
 }
 
 .categoriesHero {
@@ -295,7 +295,7 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(51, 199, 196, 0.18), transparent 70%);
+  background: radial-gradient(circle at center, rgba(var(--accent2-rgb), 0.2), transparent 70%);
   pointer-events: none;
 }
 
@@ -431,7 +431,7 @@
   font-size: 22px;
   font-weight: 700;
   color: var(--category-color, var(--text));
-  background: var(--category-gradient, rgba(51, 199, 196, 0.12));
+  background: var(--category-gradient, rgba(var(--accent2-rgb), 0.12));
   border: 1px solid var(--category-color, var(--border-soft));
 }
 
@@ -475,7 +475,7 @@
 .ageGateBackdrop {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(15, 12, 8, 0.6);
   backdrop-filter: blur(8px);
 }
 
@@ -513,9 +513,9 @@
 }
 
 .card {
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-soft);
-  background: var(--panel);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 60%), var(--panel);
   overflow: hidden;
   box-shadow: var(--shadow-soft);
   cursor: pointer;
@@ -543,7 +543,7 @@
 .thumbPlaceholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, rgba(51, 199, 196, 0.18), rgba(247, 178, 76, 0.16));
+  background: linear-gradient(120deg, rgba(var(--accent-rgb), 0.18), rgba(var(--accent2-rgb), 0.2));
 }
 
 .card .body {
@@ -580,23 +580,23 @@
 }
 
 .kpiCard.teal {
-  border-color: rgba(51, 199, 196, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .kpiCard.sun {
-  border-color: rgba(247, 178, 76, 0.35);
+  border-color: rgba(var(--accent2-rgb), 0.35);
 }
 
 .kpiCard.indigo {
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: rgba(var(--accent4-rgb), 0.35);
 }
 
 .kpiCard.rose {
-  border-color: rgba(241, 91, 122, 0.35);
+  border-color: rgba(var(--accent3-rgb), 0.35);
 }
 
 .kpiCard.slate {
-  border-color: rgba(51, 65, 85, 0.25);
+  border-color: rgba(var(--accent7-rgb), 0.3);
 }
 
 .modalOverlay {
@@ -800,7 +800,7 @@
   right: -60px;
   width: 180px;
   height: 180px;
-  background: radial-gradient(circle, rgba(51, 199, 196, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent2-rgb), 0.22), transparent 70%);
   pointer-events: none;
 }
 
@@ -840,28 +840,28 @@
   height: 160px;
   right: -60px;
   top: -70px;
-  background: radial-gradient(circle, rgba(51, 199, 196, 0.18), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--accent2-rgb), 0.18), transparent 70%);
   pointer-events: none;
 }
 
 .adminKpiCard.teal {
-  border-color: rgba(51, 199, 196, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 .adminKpiCard.sun {
-  border-color: rgba(247, 178, 76, 0.35);
+  border-color: rgba(var(--accent2-rgb), 0.35);
 }
 
 .adminKpiCard.indigo {
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: rgba(var(--accent4-rgb), 0.35);
 }
 
 .adminKpiCard.rose {
-  border-color: rgba(241, 91, 122, 0.35);
+  border-color: rgba(var(--accent3-rgb), 0.35);
 }
 
 .adminKpiCard.slate {
-  border-color: rgba(51, 65, 85, 0.25);
+  border-color: rgba(var(--accent7-rgb), 0.3);
 }
 
 .adminKpiTop {
@@ -1071,7 +1071,7 @@
   display: block;
   width: 100%;
   border-radius: 999px 999px 6px 6px;
-  background: linear-gradient(180deg, rgba(51, 199, 196, 0.9), rgba(51, 199, 196, 0.25));
+  background: linear-gradient(180deg, rgba(var(--accent2-rgb), 0.92), rgba(var(--accent2-rgb), 0.25));
   box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -1099,7 +1099,7 @@
 }
 
 .adminChartBar.isPeak span {
-  background: linear-gradient(180deg, rgba(241, 91, 122, 0.95), rgba(241, 91, 122, 0.25));
+  background: linear-gradient(180deg, rgba(var(--accent3-rgb), 0.95), rgba(var(--accent3-rgb), 0.25));
   box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.12);
 }
 

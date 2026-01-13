@@ -13,7 +13,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .row.wrap {
@@ -46,9 +46,9 @@
 
 .brand {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 26px;
-  letter-spacing: 0.2px;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 0.4px;
 }
 
 .shell {
@@ -72,7 +72,7 @@
   border-bottom: 1px solid var(--line);
   background: var(--header-bg);
   backdrop-filter: blur(12px);
-  padding: 10px 0;
+  padding: 16px 0;
 }
 
 .footer {
@@ -93,16 +93,16 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border-radius: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border-soft);
   background: var(--nav-bg);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .nav a:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .navLabel {
@@ -125,8 +125,8 @@
 .sidebarCard {
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--panel-gradient);
-  padding: 16px;
+  background: linear-gradient(160deg, rgba(var(--accent2-rgb), 0.08), transparent 55%), var(--panel-gradient);
+  padding: 18px;
   box-shadow: var(--shadow-soft);
 }
 

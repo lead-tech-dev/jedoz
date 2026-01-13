@@ -76,9 +76,26 @@ async function main() {
 
   // Credit packs (Step 1)
   const packs = [
+    { name: 'Nano', credits: 3, price: 1000, currency: 'XAF', country: 'CM', position: 5 },
     { name: 'Starter', credits: 5, price: 2000, currency: 'XAF', country: 'CM', position: 10 },
-    { name: 'Booster', credits: 15, price: 5000, currency: 'XAF', country: 'CM', position: 20 },
-    { name: 'Pro', credits: 40, price: 10000, currency: 'XAF', country: 'CM', position: 30 },
+    { name: 'Mini', credits: 10, price: 3500, currency: 'XAF', country: 'CM', position: 20 },
+    { name: 'Booster', credits: 15, price: 5000, currency: 'XAF', country: 'CM', position: 30 },
+    { name: 'Plus', credits: 20, price: 6500, currency: 'XAF', country: 'CM', position: 40 },
+    { name: 'Power', credits: 25, price: 8000, currency: 'XAF', country: 'CM', position: 50 },
+    { name: 'Pro', credits: 40, price: 10000, currency: 'XAF', country: 'CM', position: 60 },
+    { name: 'Pro Plus', credits: 50, price: 15000, currency: 'XAF', country: 'CM', position: 70 },
+    { name: 'Ultra', credits: 60, price: 18000, currency: 'XAF', country: 'CM', position: 80 },
+    { name: 'Mega', credits: 75, price: 22000, currency: 'XAF', country: 'CM', position: 90 },
+    { name: 'Mega Plus', credits: 90, price: 26000, currency: 'XAF', country: 'CM', position: 100 },
+    { name: 'Max', credits: 110, price: 30000, currency: 'XAF', country: 'CM', position: 110 },
+    { name: 'Elite', credits: 130, price: 35000, currency: 'XAF', country: 'CM', position: 120 },
+    { name: 'Premium', credits: 160, price: 42000, currency: 'XAF', country: 'CM', position: 130 },
+    { name: 'Platinum', credits: 200, price: 50000, currency: 'XAF', country: 'CM', position: 140 },
+    { name: 'Diamond', credits: 250, price: 62000, currency: 'XAF', country: 'CM', position: 150 },
+    { name: 'Gold', credits: 300, price: 74000, currency: 'XAF', country: 'CM', position: 160 },
+    { name: 'Titan', credits: 400, price: 95000, currency: 'XAF', country: 'CM', position: 170 },
+    { name: 'Supreme', credits: 500, price: 115000, currency: 'XAF', country: 'CM', position: 180 },
+    { name: 'Ultimate', credits: 700, price: 155000, currency: 'XAF', country: 'CM', position: 190 },
   ];
   for (const p of packs) {
     const existingPack = await prisma.creditPack.findFirst({ where: { name: p.name, country: p.country } });

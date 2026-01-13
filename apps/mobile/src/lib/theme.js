@@ -1,62 +1,62 @@
 import { Appearance } from 'react-native';
 
 const lightColors = {
-  bg: '#f6f1e8',
-  panel: '#fffdf9',
-  panelAlt: '#fff6ea',
-  text: '#14171a',
-  muted: '#5f5d58',
-  line: 'rgba(20,23,26,0.12)',
-  accent: '#33c7c4',
-  accent2: '#f7b24c',
-  accent3: '#f15b7a',
-  success: '#16a34a',
-  warning: '#d97706',
-  danger: '#dc2626',
-  card: '#ffffff',
-  chip: '#fff6ea'
+  bg: '#f6efe6',
+  panel: '#fff8ef',
+  panelAlt: '#f2e7d7',
+  text: '#1f1a12',
+  muted: '#6a6156',
+  line: 'rgba(31,26,18,0.12)',
+  accent: '#2f6b4f',
+  accent2: '#f0a33a',
+  accent3: '#d9623a',
+  success: '#2e7d32',
+  warning: '#c26b21',
+  danger: '#c7362a',
+  card: '#fff7ed',
+  chip: '#f7ebdc'
 };
 
 const darkColors = {
-  bg: '#0f1117',
-  panel: '#171a22',
-  panelAlt: '#1f2430',
-  text: '#f5f7ff',
-  muted: '#9aa3b2',
-  line: 'rgba(255,255,255,0.08)',
-  accent: '#33c7c4',
-  accent2: '#f7b24c',
-  accent3: '#f15b7a',
-  success: '#22c55e',
-  warning: '#f59e0b',
-  danger: '#ef4444',
-  card: '#151823',
-  chip: '#262b39'
+  bg: '#0f0d0a',
+  panel: '#19150f',
+  panelAlt: '#221c14',
+  text: '#f8f2e8',
+  muted: '#b1a89d',
+  line: 'rgba(248,242,232,0.08)',
+  accent: '#4f8f66',
+  accent2: '#f0a33a',
+  accent3: '#e07448',
+  success: '#5abf75',
+  warning: '#f0a33a',
+  danger: '#ef6a5b',
+  card: '#17120d',
+  chip: '#272018'
 };
 
 const radius = {
-  sm: 10,
-  md: 16,
-  lg: 22,
-  xl: 28,
+  sm: 12,
+  md: 18,
+  lg: 24,
+  xl: 30,
   pill: 999
 };
 
 const spacing = {
   xs: 6,
-  sm: 10,
-  md: 16,
-  lg: 22,
-  xl: 30
+  sm: 12,
+  md: 18,
+  lg: 24,
+  xl: 32
 };
 
 const shadow = {
   soft: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 6
+    shadowOpacity: 0.18,
+    shadowRadius: 18,
+    elevation: 5
   }
 };
 
@@ -66,8 +66,8 @@ const buildTheme = (colors) => ({
   spacing,
   shadow,
   textStyles: {
-    h1: { fontSize: 28, fontWeight: '800', color: colors.text },
-    h2: { fontSize: 20, fontWeight: '700', color: colors.text },
+    h1: { fontSize: 30, fontWeight: '800', color: colors.text },
+    h2: { fontSize: 22, fontWeight: '700', color: colors.text },
     body: { fontSize: 15, color: colors.text },
     muted: { fontSize: 13, color: colors.muted }
   }

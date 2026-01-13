@@ -1,6 +1,6 @@
 @use './tokens' as t;
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:wght@400;600;700;800&display=swap');
 
 * {
   box-sizing: border-box;
@@ -37,5 +37,5 @@ textarea {
 }
 
 ::selection {
-  background: rgba(51, 199, 196, 0.25);
+  background: rgba(var(--accent2-rgb), 0.28);
 }
